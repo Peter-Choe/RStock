@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="data.mybatis.mapper.StockMapper">
+
+	<select id="tacp_Select" resultType="com.neo.stock.vo.StockVo">
+		select substr(stockCode,6) stockCode,
+               case when BuySell  = 'Sell' then sum(notPaidAmount*-1) 
+               		when BuySell ='Buy' then sum(notPaidAmount) 
+                	end as total_amount,
+               renewTime,
+               curPrice 
+      from total_5002 
+      group by stockCode
+	</select>
+	
+	<select id="list_Select" resultType="com.neo.stock.vo.StockVo">
+		select concat(concat(substr(userId,1,4),'_'), substr(accountNum,12)) userId,
+               accountNum,
+         	   substr(stockCode,6) stockCode,
+         	   BuySell,
+          	   (case when BuySell  = 'Sell' then notPaidAmount *(-1)
+              	     else notPaidAmount 
+               	 	 end
+          		) as notPaidAmount, 
+           		avgPrice,
+           		curPrice,
+           		gainLoss, 
+           		renewTime
+          from total_5002           
+	</select>
+	
+	<select id="chart_Select" resultType="com.neo.stock.vo.StockVo">
+		select substr(stockCode,6) stockCode 
+			, (case when BuySell = 'Sell' then sum(notPaidAmount *-1) 
+				   when BuySell = 'Buy' then sum(notPaidAmount) 
+				   end) as total_amount 
+		from total_5002 
+		group by stockCode
+		order by stockCode
+	</select>
+	
+	<select id="chartJson" resultType="com.neo.stock.vo.ChartVo">
+      select bs_dt as x,
+      		 o,
+      		 h,
+      		 l,
+      		 c,
+      		 volume
+      from tr_min
+      order by x
+   	</select>
+</mapper>
