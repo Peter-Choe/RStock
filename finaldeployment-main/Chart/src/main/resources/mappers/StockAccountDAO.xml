@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chart.data.IStockAccountDAO">
+	<select id="getCount" resultType="java.lang.Integer">
+		SELECT count(*) FROM total_5002
+	</select>
+	
+	<select id="getList" resultType="StockAccountDTO">
+		SELECT * FROM total_5002
+	</select>
+	
+	<select id="getTotal" resultType="StockAccountDTO">
+		SELECT ITEMCODE, SUM(UNSETTLED) "TOTAL", CURRPRICE
+			  , DATE_FORMAT(MAX(UPDATETIME), '%m/%d/%Y %H:%i:%s') UPDATETIME
+		FROM
+		(
+			SELECT SUBSTR(ITEMCODE, 6,8) "ITEMCODE"
+				  , CASE WHEN LOWER(BUYSELL) = 'sell' THEN UNSETTLED*-1
+				  			ELSE UNSETTLED END UNSETTLED
+				  , CURRPRICE, STR_TO_DATE(UPDATETIME, '%m/%d/%Y, %H:%i:%S') UPDATETIME
+			FROM total_5002
+		) T1
+		GROUP BY T1.ITEMCODE
+	</select>
+	
+	<select id="getIdAccount" resultType="StockAccountDTO">
+		SELECT DISTINCT ACCOUNTNUM, ID, CONCAT(SUBSTR(ID, 1, 4), '_', SUBSTR(ACCOUNTNUM, LENGTH(ACCOUNTNUM), LENGTH(ACCOUNTNUM))) AS IDACCOUNT
+		FROM total_5002
+		ORDER BY IDACCOUNT
+	</select>
+	
+	<select id="getTransaction" resultType="StockAccountDTO">
+		SELECT SUBSTR(ITEMCODE, 6,8) "ITEMCODE"
+			  , CASE WHEN LOWER(BUYSELL) = 'sell' THEN UNSETTLED*-1
+			  			ELSE UNSETTLED END UNSETTLED
+			  , CONCAT(SUBSTR(ID, 1, 4), '_', SUBSTR(ACCOUNTNUM, LENGTH(ACCOUNTNUM), LENGTH(ACCOUNTNUM))) AS IDACCOUNT
+		FROM total_5002
+	</select>
+</mapper>
