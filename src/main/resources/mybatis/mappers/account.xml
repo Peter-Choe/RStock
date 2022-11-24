@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.spring.DAO.StockDAO">
+	<select id="listAccount" parameterType="Stock" resultType="Stock">
+		select  concat(concat(substr(user_id,1,4),'_'), substr(account_num,12)) user_id,
+			account_num,
+			substr(stock_code,6) stock_code,
+			trade_type,
+		    (case when trade_type = 'Sell' then outstanding_amount*(-1)
+				   else outstanding_amount
+				   end
+		    ) as outstanding_amount,
+	        avg_price, cur_price,valu_loss,update_time
+		from total_5002
+	</select>
+	<select id="totalAccount" parameterType="Stock" resultType="StockTotal">
+		select
+				substr(stock_code,6) stock_code,
+				case when trade_type = 'Sell' then sum(outstanding_amount*-1) when trade_type='Buy' then sum(outstanding_amount) end as total_amount,
+       			 cur_price
+		from total_5002 
+		group by stock_code, cur_price
+	</select>
+	<select id="chartJson" resultType="StockChart">
+		select base_date as x, open_price as open, high,low, closed as close
+		from tr_min
+		order by x
+	
+	</select>
+</mapper>

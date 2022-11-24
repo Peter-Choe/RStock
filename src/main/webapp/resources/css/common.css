@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+*{
+	margin: 0;
+	padding: 0;
+}
+.wrap{
+	width: 100%;
+}
+
+.Header, .content, .Footer{
+	width: 100%;
+	float: left;
+}
+
+.Header, .Footer{
+	height: 8em;
+}
+
+.Header{
+	background-color: white;
+	border-bottom: 1px solid;
+	display: flex;
+}
+
+.side{
+	width: 10%;
+	height: 600px;
+	background-color: white;
+	float: left;
+}
+
+.page_content{
+	width: 90%;
+	height: 600px;
+	background-color: white;
+	float: left;
+}
+
+
+.Footer{
+	background-color: white;
+}
