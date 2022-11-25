@@ -66,6 +66,7 @@ public class MsService {
 	}
 
 	
+	// 실시간 데이터를 위해 비트코인 가격 데이터를 임시로 불러오고 있음
 	public String getCurrPrice() {
 		Document doc = null;
 		Elements priceEl = null;
