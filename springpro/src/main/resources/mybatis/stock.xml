@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.my.spring.stockchart.dao.StockchartMapper">
+ 	<select id="getStockData" resultType="com.my.spring.stockchart.dto.StockDto">
+ 		select update_time as x, O as open, H as high, L as low, C as close from tr_day;
+ 	</select>
+ 
+ </mapper>

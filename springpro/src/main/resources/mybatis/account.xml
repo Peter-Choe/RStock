@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.spring.account.dao.AccountMapper">
+	<select id="getAccountList" resultType="com.my.spring.account.dto.AccountDto">
+		select concat(concat(substr(user_id,1,4),'_'),
+		substr(account_num,12)) user_id,
+		account_num,
+		substr(item_code,6) item_code,
+		type,
+		(case when type = 'Sell' then outstand_amount*(-1)
+		else outstand_amount
+		end
+		) as outstand_amount,
+		avg_price, cur_price,val_pl,update_time
+		from total_5002
+	</select>
+
+	<select id="getItemDataList"
+		resultType="com.my.spring.account.dto.ItemDto">
+		select  substr(item_code,6) item_code, update_time, case when type = 'Sell' then
+		sum(outstand_amount*-1) when type='Buy' then sum(outstand_amount) end
+		as total_amount, cur_price from total_5002 group by  substr(item_code,6)
+	</select>
+
+</mapper>
