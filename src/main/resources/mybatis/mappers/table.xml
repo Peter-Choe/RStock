@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.table">
+	<resultMap type="msTableVO" id="accountResult">
+		<result property="userId" column="ID"/>
+		<result property="accNum" column="id_acc_num" />
+		<result property="itemCd" column="item_cd_sub" />
+		<result property="purchase" column="구분" />
+		<result property="amount" column="amount" />
+		<result property="avgPrice" column="평균단가" />
+		<result property="currPrice" column="현재가" />
+	</resultMap>
+	<resultMap type="string" id="userIdResult">
+		<result property="userId" column="ID"/>
+	</resultMap>
+	<resultMap type="string" id="accNumResult">
+		<result property="accNum" column="id_acc_num"/>
+	</resultMap>
+	<resultMap type="hashmap" id="itemResult">
+		<result property="itemCd" column="item_cd_sub"/>
+		<result property="sumAmount" column="sum_amount"/>
+		<result property="currPrice" column="현재가"/>
+	</resultMap>
+	<select id="selectUserIdList" resultMap="userIdResult">
+		<![CDATA[
+			SELECT DISTINCT id FROM total_5002
+		]]>
+	</select>
+	<select id="selectAccNumList" resultMap="accNumResult">
+		<![CDATA[
+			SELECT DISTINCT CONCAT(CONCAT(SUBSTRING(id, 1, 4), '_'), SUBSTR(계좌번호, -1, 1)) id_acc_num FROM total_5002 ORDER BY id_acc_num
+		]]>
+	</select>
+	
+	<select id="selectItemList" resultMap="itemResult">
+		<![CDATA[
+			SELECT 
+				SUBSTR(종목코드, -3, 3) item_cd_sub, 
+				CAST(sum(case when 구분='Sell' then CONCAT('-', 미결제량) ELSE 미결제량 END) AS VARCHAR(10)) sum_amount,
+				현재가
+			FROM total_5002
+			GROUP BY item_cd_sub
+		]]>
+	</select>
+	
+	<select id="selectAccountList" resultMap="accountResult">
+		<![CDATA[
+			SELECT id, CONCAT(concat(substr(id, 1, 4), '_'), SUBSTR(계좌번호, -1, 1)) id_acc_num, SUBSTR(종목코드, -3, 3) item_cd_sub, case when 구분='Sell' then CONCAT('-', 미결제량) ELSE 미결제량  END amount FROM total_5002 ORDER BY id_acc_num, item_cd_sub
+		]]>
+	</select>
+	
+	
+</mapper>

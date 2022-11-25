@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="baseLayout"
+		template="/WEB-INF/views/common/layout.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header"
+			value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="body" value="" />
+		
+	</definition>
+	
+	<definition name="chartbody" template="/WEB-INF/views/common/chartlayout.jsp">
+		<put-attribute name="chart1" value="/WEB-INF/views/pricechart.jsp" />
+		<put-attribute name="chart2" value="/WEB-INF/views/currpricechart.jsp" />
+	</definition>
+	
+	
+	
+	<definition name="table" extends="baseLayout">
+		<put-attribute name="title" value="계좌 테이블" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/table.jsp" />
+	</definition>
+	
+	
+	
+	
+	<definition name="chart" extends="baseLayout">
+		<put-attribute name="title" value="차트" />
+		<put-attribute name="body" value="chartbody"/>
+	</definition>
+	
+</tiles-definitions>

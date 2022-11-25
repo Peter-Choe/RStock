@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mappers.priceChart">
+	<resultMap type="hashmap" id="priceChartResult">
+		<result property="date" column="date"/>
+  		<result property="open" column="open"/>
+  		<result property="high" column="high"/>
+  		<result property="low" column="low"/>
+  		<result property="close" column="close"/>
+  	</resultMap>
+  	
+  	<select id="selectPriceList" resultMap="priceChartResult">
+		<![CDATA[
+			SELECT CONCAT(SUBSTR(UNIX_TIMESTAMP(DATE), 1, 10), '000') DATE, OPEN, high, low, close FROM tr_day WHERE name = '309AN285' ORDER BY DATE
+		]]>
+	</select>
+ </mapper>
+  
